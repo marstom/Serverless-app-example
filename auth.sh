@@ -1,0 +1,1 @@
+export ID_TOKEN=$(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id 12rhvodbur7krnaq6oag01moku --auth-parameters 'USERNAME=marstomek@gmail.com,PASSWORD=!@#Kotek123' --output text --query AuthenticationResult.IdToken)
