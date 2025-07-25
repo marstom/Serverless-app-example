@@ -1,1 +1,11 @@
-export ID_TOKEN=$(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id i6lkddii4r6eg26pj406aeov7 --auth-parameters 'USERNAME=marstomek@gmail.com,PASSWORD=!@#Kotek123' --output text --query AuthenticationResult.IdToken)
+
+
+# Put variables to .env
+
+echo $(aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id $CLIENT_ID --auth-parameters $AUTH_PARAMETERS --output text --query AuthenticationResult.IdToken)
+
+
+
+
+# The auth params should be like this:
+# 'USERNAME=asdf@asdf.com,PASSWORD=password'

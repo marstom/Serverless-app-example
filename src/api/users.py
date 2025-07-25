@@ -55,9 +55,7 @@ def lambda_handler(event, context):
         # Create a new user 
         if route_key == 'POST /users':
             request_json = json.loads(event['body'])
-            # raise Exception("DEBUG")
-            print("--------------------------")
-            print("DEBUG")
+
             request_json['timestamp'] = datetime.now().isoformat()
             # generate unique id if it isn't present in the request
             if 'userid' not in request_json:
