@@ -1,16 +1,109 @@
-# Serverless Users API
+
+# Serverless Application, restaurants orders
+
+# Contents
+* [Architecture overview](#Architecture overview)
+* [Users module](#users-module)
+
+
+Continue to:
+
+ - [x] 3 - Add structured logging with Powertools
+ - \
+
+# Architecture overview
+
+```text
+
+
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────────┐
+│   Cognito       │    │   API Gateway    │    │    EventBridge      │
+│   User Pool     │◄───┤  (ProfileApi)    │───►│   (AddressBus)      │
+│                 │    │                  │    │                     │
+└─────────────────┘    └──────────────────┘    └─────────────────────┘
+                                │                          │
+                                │                          │
+                                ▼                          ▼
+                       ┌──────────────────┐    ┌─────────────────────┐
+                       │      SQS         │    │   Lambda Functions  │
+                       │ FavoriteRestaurants│   │                     │
+                       │     Queue        │    │ • AddUserAddress    │
+                       └──────────────────┘    │ • EditUserAddress   │
+                                │              │ • DeleteUserAddress │
+                                │              │ • ListUserAddresses │
+                                ▼              │ • ProcessFavorites  │
+                       ┌──────────────────┐    │ • ListUserFavorites │
+                       │   Lambda         │    └─────────────────────┘
+                       │ProcessFavorites  │              │
+                       │    Queue         │              │
+                       └──────────────────┘              ▼
+                                │              ┌─────────────────────┐
+                                ▼              │     DynamoDB        │
+                       ┌──────────────────┐    │                     │
+                       │   DynamoDB       │    │ • UserAddressesTable│
+                       │ FavoritesTable   │◄───┤ • FavoritesTable    │
+                       └──────────────────┘    └─────────────────────┘
+
+```
+
+
+Mermaid:
+
+
+```mermaid
+
+
+graph TB
+    CognitoPool[Cognito User Pool] --> APIGateway[API Gateway ProfileApi]
+    
+    APIGateway --> EventBridge[EventBridge AddressBus]
+    APIGateway --> SQSQueue[SQS FavoriteRestaurants Queue]
+    APIGateway --> ListAddressLambda[ListUserAddresses Lambda]
+    APIGateway --> ListFavoritesLambda[ListUserFavorites Lambda]
+    
+    EventBridge --> AddLambda[AddUserAddress Lambda]
+    EventBridge --> EditLambda[EditUserAddress Lambda] 
+    EventBridge --> DeleteLambda[DeleteUserAddress Lambda]
+    
+    SQSQueue --> ProcessFavoritesLambda[ProcessFavorites Lambda]
+    
+    AddLambda --> AddressTable[DynamoDB UserAddressesTable]
+    EditLambda --> AddressTable
+    DeleteLambda --> AddressTable
+    ListAddressLambda --> AddressTable
+    
+    ProcessFavoritesLambda --> FavoritesTable[DynamoDB FavoritesTable]
+    ListFavoritesLambda --> FavoritesTable
+    
+    classDef auth fill:#e1f5fe
+    classDef api fill:#f3e5f5
+    classDef event fill:#fff3e0
+    classDef queue fill:#e8f5e8
+    classDef lambda fill:#fce4ec
+    classDef database fill:#f1f8e9
+    
+    class CognitoPool auth
+    class APIGateway api
+    class EventBridge event
+    class SQSQueue queue
+    class AddLambda,EditLambda,DeleteLambda,ListAddressLambda,ProcessFavoritesLambda,ListFavoritesLambda lambda
+    class AddressTable,FavoritesTable database
+
+```
+
+
+
+# Users Module
+
+## Serverless Users API
 Authorization: {{jwt}}
 
 A serverless REST API for user management built with AWS SAM, featuring JWT authentication via Amazon Cognito and DynamoDB storage.
 
 ## Architecture
 
-### Infrastructure Diagram
+### Users module Infrastructure Diagram
 
-```mermaid
-graph TD;
-  a-->b;
-```
 
 ```mermaid
 graph TB

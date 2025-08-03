@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "order-status-stack"
+resolve_s3 = true
+s3_prefix = "order-status-stack"
+region = "eu-central-1"
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "OrdersTablename=\"orders-stack-OrdersTable-16E3ZH7TPJ6X2\" UserPool=\"eu-central-1_LjfEtEoxt\" Stage=\"dev\""
+image_repositories = []

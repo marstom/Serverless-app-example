@@ -1,0 +1,12 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "users-stack"
+resolve_s3 = true
+s3_prefix = "users-stack"
+region = "eu-central-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "UserPoolAdminGroupName=\"apiAdmins\""
+image_repositories = []
