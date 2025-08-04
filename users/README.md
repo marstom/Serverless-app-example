@@ -19,3 +19,8 @@ sam deploy --stack-name serverless-workshop --resolve-s3 --capabilities CAPABILI
 
 The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts.
 
+
+# Deploy
+
+1. Export GITHUB_TOKEN.
+2. Push the main branch.
